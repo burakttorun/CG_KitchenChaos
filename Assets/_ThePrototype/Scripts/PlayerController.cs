@@ -7,11 +7,23 @@ namespace ThePrototype.Scripts
 {
     public class PlayerController : MonoBehaviour
     {
+        #region CashedData
+
+        private Transform _transform;
+
+        #endregion
+
         [SerializeField] private float _movementSpeed = 7f;
+        [SerializeField] private float _rotationSpeed = 10f;
+
+        private void Start()
+        {
+            _transform = transform;
+        }
 
         private void Update()
         {
-            Vector2 inputVector = new Vector2(0, 0);
+            Vector2 inputVector = Vector3.zero;
             if (Input.GetKey(KeyCode.W))
             {
                 inputVector.y += 1;
@@ -31,10 +43,14 @@ namespace ThePrototype.Scripts
             {
                 inputVector.x -= 1;
             }
-            inputVector.Normalize();
 
-               Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-               transform.position += moveDir * (Time.deltaTime * _movementSpeed);
+            inputVector.Normalize();
+            Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+
+            _transform.position += moveDir * (Time.deltaTime * _movementSpeed);
+
+            _transform.forward = Vector3.Slerp(_transform.forward, moveDir, Time.deltaTime * _rotationSpeed);
         }
     }
 }
