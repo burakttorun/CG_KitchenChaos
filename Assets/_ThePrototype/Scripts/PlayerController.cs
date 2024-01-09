@@ -15,6 +15,8 @@ namespace ThePrototype.Scripts
 
         [SerializeField] private float _movementSpeed = 7f;
         [SerializeField] private float _rotationSpeed = 10f;
+        private bool _isWalking;
+        public bool IsWalking => _isWalking;
 
         private void Start()
         {
@@ -46,7 +48,7 @@ namespace ThePrototype.Scripts
 
             inputVector.Normalize();
             Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-
+            _isWalking = moveDir != Vector3.zero;
 
             _transform.position += moveDir * (Time.deltaTime * _movementSpeed);
 
