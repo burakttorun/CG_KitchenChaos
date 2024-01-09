@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ThePrototype.Scripts
@@ -13,6 +10,10 @@ namespace ThePrototype.Scripts
 
         #endregion
 
+        [Header("References")]
+        [SerializeField] private InputManager.InputManager _inputManager;
+
+        [Header("Settings")]
         [SerializeField] private float _movementSpeed = 7f;
         [SerializeField] private float _rotationSpeed = 10f;
         private bool _isWalking;
@@ -25,28 +26,7 @@ namespace ThePrototype.Scripts
 
         private void Update()
         {
-            Vector2 inputVector = Vector3.zero;
-            if (Input.GetKey(KeyCode.W))
-            {
-                inputVector.y += 1;
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                inputVector.y -= 1;
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                inputVector.x += 1;
-            }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                inputVector.x -= 1;
-            }
-
-            inputVector.Normalize();
+            Vector2 inputVector = _inputManager.GetMovementVectorNormalized();
             Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
             _isWalking = moveDir != Vector3.zero;
 
