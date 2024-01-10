@@ -1,3 +1,4 @@
+using ThePrototype.Scripts.Base;
 using UnityEngine;
 
 namespace ThePrototype.Scripts
@@ -17,8 +18,12 @@ namespace ThePrototype.Scripts
         [SerializeField] private float _rotationSpeed = 10f;
         [SerializeField] private float _playerRadius = 0.9f;
         [SerializeField] private float _playerHeight = 2f;
+        [SerializeField] private float _interactDistance = 2f;
+        [SerializeField] private LayerMask _interactLayerMask;
+
         private bool _isWalking;
         private float _moveDistance;
+        private Vector3 _lastInteractDirection;
         public bool IsWalking => _isWalking;
 
         private void Start()
@@ -27,6 +32,12 @@ namespace ThePrototype.Scripts
         }
 
         private void Update()
+        {
+            HandleMovement();
+            HandleInteraction();
+        }
+
+        private void HandleMovement()
         {
             Vector2 inputVector = _inputManager.GetMovementVectorNormalized();
             Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
@@ -56,6 +67,26 @@ namespace ThePrototype.Scripts
 
             _transform.position += moveDir * _moveDistance;
             _transform.forward = Vector3.Slerp(_transform.forward, moveDir, Time.deltaTime * _rotationSpeed);
+        }
+
+        private void HandleInteraction()
+        {
+            Vector3 inputVector = _inputManager.GetMovementVectorNormalized();
+            Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+
+            if (moveDir != Vector3.zero)
+            {
+                _lastInteractDirection = moveDir;
+            }
+
+            if (Physics.Raycast(_transform.position, _lastInteractDirection, out RaycastHit raycastHit,
+                    _interactDistance, _interactLayerMask))
+            {
+                if (raycastHit.transform.TryGetComponent(out IInteractable interactable))
+                {
+                    interactable.Interact();
+                }
+            }
         }
 
         private bool CapsuleRayCast(Vector3 moveDir)
