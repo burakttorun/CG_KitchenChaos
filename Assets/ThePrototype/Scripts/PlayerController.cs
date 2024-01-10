@@ -4,8 +4,16 @@ using UnityEngine;
 
 namespace ThePrototype.Scripts
 {
+    public class OnSelectedInteractableChangedEventArgs : EventArgs
+    {
+        public IInteractable selectedInteractable;
+    }
+
     public class PlayerController : MonoBehaviour
     {
+        public static PlayerController Instance { get; private set; }
+        public event EventHandler<OnSelectedInteractableChangedEventArgs> OnSelectedInteractableChanged;
+
         #region CashedData
 
         private Transform _transform;
@@ -25,39 +33,34 @@ namespace ThePrototype.Scripts
         private bool _isWalking;
         private float _moveDistance;
         private Vector3 _lastInteractDirection;
+        private IInteractable _selectedInteractable;
         public bool IsWalking => _isWalking;
 
         private void Awake()
         {
-            _inputManager.Interact += HandleInteraction;
+            if (Instance != null)
+            {
+                Debug.LogError("There is more than one Player Instance!");
+            }
+            else
+            {
+                Instance = this;
+            }
+
+            _inputManager.Interact += OnInteract;
             _transform = transform;
         }
 
-        private void HandleInteraction(bool isPressed)
+        private void OnInteract(bool isPressed)
         {
             if (!isPressed) return;
-
-            Vector3 inputVector = _inputManager.GetMovementVectorNormalized();
-            Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-
-            if (moveDir != Vector3.zero)
-            {
-                _lastInteractDirection = moveDir;
-            }
-
-            if (Physics.Raycast(_transform.position, _lastInteractDirection, out RaycastHit raycastHit,
-                    _interactDistance, _interactLayerMask))
-            {
-                if (raycastHit.transform.TryGetComponent(out IInteractable interactable))
-                {
-                    interactable.Interact();
-                }
-            }
+            _selectedInteractable?.Interact();
         }
 
         private void Update()
         {
             HandleMovement();
+            HandleInteraction();
         }
 
         private void HandleMovement()
@@ -92,10 +95,48 @@ namespace ThePrototype.Scripts
             _transform.forward = Vector3.Slerp(_transform.forward, moveDir, Time.deltaTime * _rotationSpeed);
         }
 
+        private void HandleInteraction()
+        {
+            Vector3 inputVector = _inputManager.GetMovementVectorNormalized();
+            Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+
+            if (moveDir != Vector3.zero)
+            {
+                _lastInteractDirection = moveDir;
+            }
+
+            if (Physics.Raycast(_transform.position, _lastInteractDirection, out RaycastHit raycastHit,
+                    _interactDistance, _interactLayerMask))
+            {
+                if (raycastHit.transform.TryGetComponent(out IInteractable interactable))
+                {
+                    if (_selectedInteractable != interactable)
+                    {
+                        SetSelectedInteractable(interactable);
+                    }
+                }
+                else
+                {
+                    SetSelectedInteractable(null);
+                }
+            }
+            else
+            {
+                SetSelectedInteractable(null);
+            }
+        }
+
         private bool CapsuleRayCast(Vector3 moveDir)
         {
             return Physics.CapsuleCast(_transform.position, _transform.position + Vector3.up * _playerHeight,
                 _playerRadius, moveDir, _moveDistance);
+        }
+
+        private void SetSelectedInteractable(IInteractable selectedItem)
+        {
+            _selectedInteractable = selectedItem;
+            OnSelectedInteractableChanged?.Invoke(this,
+                new OnSelectedInteractableChangedEventArgs { selectedInteractable = selectedItem });
         }
     }
 }
