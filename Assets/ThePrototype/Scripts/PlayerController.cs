@@ -1,3 +1,4 @@
+using System;
 using ThePrototype.Scripts.Base;
 using UnityEngine;
 
@@ -26,15 +27,37 @@ namespace ThePrototype.Scripts
         private Vector3 _lastInteractDirection;
         public bool IsWalking => _isWalking;
 
-        private void Start()
+        private void Awake()
         {
+            _inputManager.Interact += HandleInteraction;
             _transform = transform;
+        }
+
+        private void HandleInteraction(bool isPressed)
+        {
+            if (!isPressed) return;
+
+            Vector3 inputVector = _inputManager.GetMovementVectorNormalized();
+            Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+
+            if (moveDir != Vector3.zero)
+            {
+                _lastInteractDirection = moveDir;
+            }
+
+            if (Physics.Raycast(_transform.position, _lastInteractDirection, out RaycastHit raycastHit,
+                    _interactDistance, _interactLayerMask))
+            {
+                if (raycastHit.transform.TryGetComponent(out IInteractable interactable))
+                {
+                    interactable.Interact();
+                }
+            }
         }
 
         private void Update()
         {
             HandleMovement();
-            HandleInteraction();
         }
 
         private void HandleMovement()
@@ -67,26 +90,6 @@ namespace ThePrototype.Scripts
 
             _transform.position += moveDir * _moveDistance;
             _transform.forward = Vector3.Slerp(_transform.forward, moveDir, Time.deltaTime * _rotationSpeed);
-        }
-
-        private void HandleInteraction()
-        {
-            Vector3 inputVector = _inputManager.GetMovementVectorNormalized();
-            Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-
-            if (moveDir != Vector3.zero)
-            {
-                _lastInteractDirection = moveDir;
-            }
-
-            if (Physics.Raycast(_transform.position, _lastInteractDirection, out RaycastHit raycastHit,
-                    _interactDistance, _interactLayerMask))
-            {
-                if (raycastHit.transform.TryGetComponent(out IInteractable interactable))
-                {
-                    interactable.Interact();
-                }
-            }
         }
 
         private bool CapsuleRayCast(Vector3 moveDir)
