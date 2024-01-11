@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ThePrototype.Scripts.Base;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace ThePrototype.Scripts
     public class SelectedCounterVisualController : MonoBehaviour
     {
         private IInteractable _interactable;
-        [SerializeField] private GameObject _visualGameObject;
+        [SerializeField] private List<GameObject> _visualGameObjects;
 
         private void Start()
         {
@@ -29,12 +30,12 @@ namespace ThePrototype.Scripts
 
         private void Show()
         {
-            _visualGameObject.SetActive(true);
+            _visualGameObjects.ForEach(x => x.SetActive(true));
         }
 
         private void Hide()
         {
-            _visualGameObject.SetActive(false);
+            _visualGameObjects.ForEach(x => x.SetActive(false));
         }
     }
 }
