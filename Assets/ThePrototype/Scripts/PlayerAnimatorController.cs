@@ -7,7 +7,7 @@ namespace ThePrototype.Scripts
 {
     public class PlayerAnimatorController : MonoBehaviour
     {
-        private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+        private readonly int IsWalking = Animator.StringToHash("IsWalking");
         [SerializeField] private PlayerController _playerController;
         private Animator _animator;
 
