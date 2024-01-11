@@ -66,10 +66,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 202759678395423477}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 768a805cfc6ef8e48b4f7b57d9c146f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 008a806c5a4e6cf4591d9a3f7caa7093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _instantiatePoint: {fileID: 3425210747431101875}
+  _kitchenObjectHoldPoint: {fileID: 3425210747431101875}
+  _kitchenEntityContainer: {fileID: 0}
+  _testCounter: {fileID: 0}
+  _testing: 0
 --- !u!1 &2116689717916375695
 GameObject:
   m_ObjectHideFlags: 0

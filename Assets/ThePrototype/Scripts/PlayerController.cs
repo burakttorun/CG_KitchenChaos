@@ -9,7 +9,7 @@ namespace ThePrototype.Scripts
         public IInteractable selectedInteractable;
     }
 
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : KitchenObjectParent , IInteractor
     {
         public static PlayerController Instance { get; private set; }
         public event EventHandler<OnSelectedInteractableChangedEventArgs> OnSelectedInteractableChanged;
@@ -54,7 +54,7 @@ namespace ThePrototype.Scripts
         private void OnInteract(bool isPressed)
         {
             if (!isPressed) return;
-            _selectedInteractable?.Interact();
+            _selectedInteractable?.Interact(this);
         }
 
         private void Update()

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ThePrototype.Scripts
 {
-    public class KitchenObjectDefinition : MonoBehaviour
+    public class KitchenObject : MonoBehaviour
     {
         #region CashedDatas
 
@@ -33,10 +33,10 @@ namespace ThePrototype.Scripts
                 _parentObject = value;
                 if (_parentObject.HasKitchenObject())
                 {
-                    Debug.LogError("Counter already has a Kitchen Object");
+                    Debug.LogError("Parent already has a Kitchen Object");
                 }
 
-                _parentObject.KitchenObjectDefinition = this;
+                _parentObject.KitchenObject = this;
                 _transform.parent = _parentObject.GetKitchenObjectFollowTransform();
                 _transform.localPosition = Vector3.zero;
             }

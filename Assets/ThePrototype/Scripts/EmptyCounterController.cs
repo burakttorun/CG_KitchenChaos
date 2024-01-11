@@ -2,66 +2,27 @@ using System;
 using ThePrototype.Scripts.Base;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace ThePrototype.Scripts
 {
-    public class EmptyCounterController : MonoBehaviour, IInteractable, IKitchenObjectParent
+    public class EmptyCounterController : KitchenObjectParent, IInteractable
     {
-        [Header("References")] [SerializeField]
-        private Transform _instantiatePoint;
-
         [SerializeField] private Object _kitchenEntityContainer;
-        [SerializeField] private GameObject _testCounter;
-        [SerializeField] private bool _testing;
         private IKitchenEntity _KitchenEntity => _kitchenEntityContainer as IKitchenEntity;
-        private KitchenObjectDefinition _kitchenObjectDefinition;
-        private IKitchenObjectParent _testCounterController;
 
-        public KitchenObjectDefinition KitchenObjectDefinition
+        public void Interact(IInteractor interactor)
         {
-            get => _kitchenObjectDefinition;
-            set { _kitchenObjectDefinition = value; }
-        }
-
-        private void Awake()
-        {
-            _testCounterController = _testCounter.GetComponent<IKitchenObjectParent>();
-        }
-
-        //just testing
-        private void Update()
-        {
-            if (_testing && Input.GetKeyDown(KeyCode.T))
+            if (_kitchenObject == null)
             {
-                if (_kitchenObjectDefinition != null)
-                {
-                    _kitchenObjectDefinition.ParentObject = _testCounterController;
-                }
+                Transform kitchenObjectTransform = Instantiate(_KitchenEntity.Prefab, _kitchenObjectHoldPoint);
+                kitchenObjectTransform.GetComponent<KitchenObject>().ParentObject = this;
             }
-        }
-
-        public bool HasKitchenObject()
-        {
-            return KitchenObjectDefinition != null;
-        }
-
-        public void ClearKitchenObject()
-        {
-            KitchenObjectDefinition = null;
-        }
-
-        public Transform GetKitchenObjectFollowTransform()
-        {
-            return _instantiatePoint;
-        }
-
-        public void Interact()
-        {
-            if (_kitchenObjectDefinition == null)
+            else
             {
-                Transform kitchenObjectTransform = Instantiate(_KitchenEntity.Prefab, _instantiatePoint);
-                kitchenObjectTransform.GetComponent<KitchenObjectDefinition>().ParentObject = this;
+                _kitchenObject.ParentObject = interactor as PlayerController;
+
             }
         }
     }

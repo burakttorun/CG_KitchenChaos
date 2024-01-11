@@ -2,6 +2,6 @@ namespace ThePrototype.Scripts.Base
 {
     public interface IInteractable
     {
-        void Interact();
+        void Interact(IInteractor interactor);
     }
 }
