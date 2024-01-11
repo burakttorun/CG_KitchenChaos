@@ -9,12 +9,16 @@ namespace ThePrototype.Scripts
         [SerializeField] private Object _kitchenEntityContainer;
 
         private IKitchenEntity _KitchenEntity => _kitchenEntityContainer as IKitchenEntity;
+        private KitchenObjectDefinition _kitchenObjectDefinition;
 
         public void Interact()
         {
-            Transform kitchenObjectTransform = Instantiate(_KitchenEntity.Prefab, _instantiatePoint);
-            kitchenObjectTransform.localPosition = Vector3.zero;
-            Debug.Log(kitchenObjectTransform.GetComponent<KitchenObjectDefinition>().KitchenObjectSettings.ObjectName);
+            if (_kitchenObjectDefinition == null)
+            {
+                Transform kitchenObjectTransform = Instantiate(_KitchenEntity.Prefab, _instantiatePoint);
+                kitchenObjectTransform.localPosition = Vector3.zero;
+                _kitchenObjectDefinition = kitchenObjectTransform.GetComponent<KitchenObjectDefinition>();
+            }
         }
     }
 }
