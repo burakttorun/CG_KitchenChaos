@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace ThePrototype.Scripts
 {
-    public class EmptyCounterController : MonoBehaviour, IInteractable, ICounter
+    public class EmptyCounterController : MonoBehaviour, IInteractable, IKitchenObjectParent
     {
         [Header("References")] [SerializeField]
         private Transform _instantiatePoint;
@@ -16,7 +16,7 @@ namespace ThePrototype.Scripts
         [SerializeField] private bool _testing;
         private IKitchenEntity _KitchenEntity => _kitchenEntityContainer as IKitchenEntity;
         private KitchenObjectDefinition _kitchenObjectDefinition;
-        private ICounter _testCounterController;
+        private IKitchenObjectParent _testCounterController;
 
         public KitchenObjectDefinition KitchenObjectDefinition
         {
@@ -26,7 +26,7 @@ namespace ThePrototype.Scripts
 
         private void Awake()
         {
-            _testCounterController = _testCounter.GetComponent<ICounter>();
+            _testCounterController = _testCounter.GetComponent<IKitchenObjectParent>();
         }
 
         //just testing

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ThePrototype.Scripts.Base
 {
-    public interface ICounter
+    public interface IKitchenObjectParent
     {
         public KitchenObjectDefinition KitchenObjectDefinition { get; set; }
         public bool HasKitchenObject();

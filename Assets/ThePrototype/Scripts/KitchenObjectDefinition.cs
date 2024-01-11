@@ -18,9 +18,9 @@ namespace ThePrototype.Scripts
         public KitchenObjectSettings KitchenObjectSettings => _kitchenObjectSettings;
 
 
-        private ICounter _parentObject;
+        private IKitchenObjectParent _parentObject;
 
-        public ICounter ParentObject
+        public IKitchenObjectParent ParentObject
         {
             get => _parentObject;
             set

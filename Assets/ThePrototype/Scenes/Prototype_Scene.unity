@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &238045237 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 202759678395423477, guid: 5ae8e43a36de9ad4e85587e1040829fa,
+    type: 3}
+  m_PrefabInstance: {fileID: 5473495878344753915}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,6 +700,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4960110116042572172, guid: 5ae8e43a36de9ad4e85587e1040829fa,
         type: 3}
+      propertyPath: _testCounter
+      value: 
+      objectReference: {fileID: 238045237}
+    - target: {fileID: 4960110116042572172, guid: 5ae8e43a36de9ad4e85587e1040829fa,
+        type: 3}
       propertyPath: _kitchenEntityContainer
       value: 
       objectReference: {fileID: 11400000, guid: 90c634d3e3f89564ba697562b087dc73,
@@ -703,6 +714,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ae8e43a36de9ad4e85587e1040829fa, type: 3}
+--- !u!1 &913013552 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 202759678395423477, guid: 5ae8e43a36de9ad4e85587e1040829fa,
+    type: 3}
+  m_PrefabInstance: {fileID: 896516535}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &916403116
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,6 +871,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4960110116042572172, guid: 5ae8e43a36de9ad4e85587e1040829fa,
+        type: 3}
+      propertyPath: _testCounter
+      value: 
+      objectReference: {fileID: 913013552}
     - target: {fileID: 4960110116042572172, guid: 5ae8e43a36de9ad4e85587e1040829fa,
         type: 3}
       propertyPath: _kitchenEntityContainer
