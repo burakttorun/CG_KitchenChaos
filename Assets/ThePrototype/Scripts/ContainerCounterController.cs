@@ -12,9 +12,13 @@ namespace ThePrototype.Scripts
         {
             if (_kitchenObject == null)
             {
-                Transform kitchenObjectTransform = Instantiate(_KitchenEntity.Prefab, _kitchenObjectHoldPoint);
-                kitchenObjectTransform.GetComponent<KitchenObject>().ParentObject = interactor as PlayerController;
-                OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+                if (interactor is IKitchenObjectParent kitchenObjectParent)
+                {
+                    if (kitchenObjectParent.HasKitchenObject()) return;
+                    Transform kitchenObjectTransform = Instantiate(_KitchenEntity.Prefab, _kitchenObjectHoldPoint);
+                    kitchenObjectTransform.GetComponent<KitchenObject>().ParentObject = kitchenObjectParent;
+                    OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
     }
