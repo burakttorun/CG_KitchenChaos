@@ -10,6 +10,7 @@ namespace ThePrototype.Scripts.InputManager
     {
         public event UnityAction<Vector2> Move = delegate { };
         public event Action<bool> Interact = delegate { };
+        public event Action<bool> InteractAlternate = delegate { };
         private PlayerInputActions _playerInputActions;
 
         public Vector2 MovementDirection => _playerInputActions.Player.Move.ReadValue<Vector2>();
@@ -44,6 +45,19 @@ namespace ThePrototype.Scripts.InputManager
                     break;
                 case InputActionPhase.Canceled:
                     Interact?.Invoke(false);
+                    break;
+            }
+        }
+
+        public void OnInteractAlternate(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    InteractAlternate?.Invoke(true);
+                    break;
+                case InputActionPhase.Canceled:
+                    InteractAlternate?.Invoke(false);
                     break;
             }
         }

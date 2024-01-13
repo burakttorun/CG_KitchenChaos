@@ -48,6 +48,7 @@ namespace ThePrototype.Scripts
             }
 
             _inputManager.Interact += OnInteract;
+            _inputManager.InteractAlternate += OnInteractAlternate;
             _transform = transform;
         }
 
@@ -55,6 +56,15 @@ namespace ThePrototype.Scripts
         {
             if (!isPressed) return;
             _selectedInteractable?.Interact(this);
+        }
+
+        private void OnInteractAlternate(bool isPressed)
+        {
+            if (!isPressed) return;
+            if (_selectedInteractable is CuttingCounterController cuttingCounterController)
+            {
+                cuttingCounterController.InteractAlternate(this);
+            }
         }
 
         private void Update()
@@ -82,7 +92,7 @@ namespace ThePrototype.Scripts
                 else
                 {
                     Vector3 moveDirZ = new Vector3(0, 0, moveDir.z);
-                    canMove = moveDirZ.z != 0 &&!CapsuleRayCast(moveDirZ);
+                    canMove = moveDirZ.z != 0 && !CapsuleRayCast(moveDirZ);
                     if (canMove)
                     {
                         moveDir = moveDirZ;

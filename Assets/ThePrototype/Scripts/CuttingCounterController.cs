@@ -27,5 +27,13 @@ namespace ThePrototype.Scripts
                 }
             }
         }
+
+        public void InteractAlternate(IInteractor interactor)
+        {
+            if (HasKitchenObject())
+            {
+                KitchenObject.DestroySelf();
+            }
+        }
     }
 }

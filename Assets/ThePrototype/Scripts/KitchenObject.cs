@@ -46,5 +46,11 @@ namespace ThePrototype.Scripts
         {
             _transform = transform;
         }
+
+        public void DestroySelf()
+        {
+            _parentObject.ClearKitchenObject();
+            Destroy(gameObject);
+        }
     }
 }
