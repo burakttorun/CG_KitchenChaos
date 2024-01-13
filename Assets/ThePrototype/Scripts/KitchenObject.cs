@@ -13,8 +13,9 @@ namespace ThePrototype.Scripts
 
         #endregion
 
-        [Header("References")]
-        [SerializeField] private KitchenObjectSettings _kitchenObjectSettings;
+        [Header("References")] [SerializeField]
+        private KitchenObjectSettings _kitchenObjectSettings;
+
         public KitchenObjectSettings KitchenObjectSettings => _kitchenObjectSettings;
 
 
@@ -51,6 +52,16 @@ namespace ThePrototype.Scripts
         {
             _parentObject.ClearKitchenObject();
             Destroy(gameObject);
+        }
+
+        public static KitchenObject SpawnKitchenObject(IKitchenEntity kitchenEntity, IKitchenObjectParent parent)
+        {
+            Transform kitchenObjectTransform =
+                Instantiate(kitchenEntity.Prefab, parent.GetKitchenObjectFollowTransform());
+            KitchenObject createdKitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+            createdKitchenObject.ParentObject = parent;
+
+            return createdKitchenObject;
         }
     }
 }

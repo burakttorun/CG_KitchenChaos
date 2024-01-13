@@ -19,8 +19,8 @@ namespace ThePrototype.Scripts
                 if (interactor is IKitchenObjectParent kitchenObjectParent)
                 {
                     if (kitchenObjectParent.HasKitchenObject()) return;
-                    Transform kitchenObjectTransform = Instantiate(_KitchenEntity.Prefab, _kitchenObjectHoldPoint);
-                    kitchenObjectTransform.GetComponent<KitchenObject>().ParentObject = kitchenObjectParent;
+
+                    KitchenObject.SpawnKitchenObject(_KitchenEntity, kitchenObjectParent);
                     OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
                 }
             }
