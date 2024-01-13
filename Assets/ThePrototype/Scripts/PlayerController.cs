@@ -9,7 +9,7 @@ namespace ThePrototype.Scripts
         public IInteractable selectedInteractable;
     }
 
-    public class PlayerController : KitchenObjectParent , IInteractor
+    public class PlayerController : KitchenObjectParent, IInteractor
     {
         public static PlayerController Instance { get; private set; }
         public event EventHandler<OnSelectedInteractableChangedEventArgs> OnSelectedInteractableChanged;
@@ -74,7 +74,7 @@ namespace ThePrototype.Scripts
             if (!canMove)
             {
                 Vector3 moveDirX = new Vector3(moveDir.x, 0, 0);
-                canMove = !CapsuleRayCast(moveDirX);
+                canMove = moveDirX.x != 0 && !CapsuleRayCast(moveDirX);
                 if (canMove)
                 {
                     moveDir = moveDirX;
@@ -82,7 +82,7 @@ namespace ThePrototype.Scripts
                 else
                 {
                     Vector3 moveDirZ = new Vector3(0, 0, moveDir.z);
-                    canMove = !CapsuleRayCast(moveDirZ);
+                    canMove = moveDirZ.z != 0 &&!CapsuleRayCast(moveDirZ);
                     if (canMove)
                     {
                         moveDir = moveDirZ;
