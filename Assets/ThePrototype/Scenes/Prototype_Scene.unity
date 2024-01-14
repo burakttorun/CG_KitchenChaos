@@ -1367,6 +1367,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 809539522}
     m_Modifications:
+    - target: {fileID: 909085184222279298, guid: 14adea53543ed834da0d643e78af293f,
+        type: 3}
+      propertyPath: _cuttingRecipesList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 909085184222279298, guid: 14adea53543ed834da0d643e78af293f,
+        type: 3}
+      propertyPath: _cuttingRecipesList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: ce4e81b6d7dbfac49845e8aaed9a5316,
+        type: 2}
+    - target: {fileID: 909085184222279298, guid: 14adea53543ed834da0d643e78af293f,
+        type: 3}
+      propertyPath: _cuttingRecipesList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ff149777727b484c90afa26b3075a8c,
+        type: 2}
+    - target: {fileID: 909085184222279298, guid: 14adea53543ed834da0d643e78af293f,
+        type: 3}
+      propertyPath: _cuttingRecipesList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8e2b3a1769434c64298fad1e8c8b4fbe,
+        type: 2}
     - target: {fileID: 5919588681066366906, guid: 14adea53543ed834da0d643e78af293f,
         type: 3}
       propertyPath: m_Name
