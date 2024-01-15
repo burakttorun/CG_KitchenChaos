@@ -1,4 +1,5 @@
 using System;
+using ThePrototype.Scripts.Counter;
 using UnityEngine;
 using UnityEngine.UI;
 

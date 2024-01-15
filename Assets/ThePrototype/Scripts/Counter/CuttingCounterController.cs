@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ThePrototype.Scripts.Base;
 using UnityEngine;
 
-namespace ThePrototype.Scripts
+namespace ThePrototype.Scripts.Counter
 {
     public class CuttingCounterController : BaseCounter
     {

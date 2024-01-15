@@ -3,7 +3,7 @@ using ThePrototype.Scripts.Base;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ThePrototype.Scripts
+namespace ThePrototype.Scripts.Counter
 {
     public class ContainerCounterController : BaseCounter
     {

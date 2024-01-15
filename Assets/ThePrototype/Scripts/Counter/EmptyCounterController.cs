@@ -1,6 +1,6 @@
 using ThePrototype.Scripts.Base;
 
-namespace ThePrototype.Scripts
+namespace ThePrototype.Scripts.Counter
 {
     public class EmptyCounterController : BaseCounter
     {

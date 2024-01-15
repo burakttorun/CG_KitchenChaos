@@ -1,5 +1,6 @@
 using System;
 using ThePrototype.Scripts.Base;
+using ThePrototype.Scripts.Counter;
 using UnityEngine;
 
 namespace ThePrototype.Scripts
