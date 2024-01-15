@@ -1,11 +1,10 @@
 using System;
 using UnityEngine;
 
-namespace ThePrototype.Scripts
+namespace ThePrototype.Scripts.AnimatorController
 {
     public class ContainerCounterAnimatorController : MonoBehaviour
     {
-        
         private ContainerCounterController _containerCounterController;
         private Animator _animator;
         private readonly int _openClose = Animator.StringToHash("OpenClose");

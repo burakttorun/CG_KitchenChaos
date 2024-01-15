@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ThePrototype.Scripts
+namespace ThePrototype.Scripts.AnimatorController
 {
     public class PlayerAnimatorController : MonoBehaviour
     {
