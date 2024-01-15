@@ -6,7 +6,10 @@ namespace ThePrototype.Scripts
 {
     public class CuttingCounterController : BaseCounter
     {
-        [SerializeField] private List<CuttingRecipeSettings> _cuttingRecipesList;
+        [Header("References")] [SerializeField]
+        private List<CuttingRecipeSettings> _cuttingRecipesList;
+
+        private int _cuttingProgress;
 
         public override void Interact(IInteractor interactor)
         {
@@ -22,6 +25,7 @@ namespace ThePrototype.Scripts
                             return;
 
                         playerController.KitchenObject.ParentObject = this;
+                        _cuttingProgress = 0;
                     }
                 }
                 else
@@ -39,14 +43,19 @@ namespace ThePrototype.Scripts
         {
             if (interactor is KitchenObjectParent kitchenObjectParent)
             {
-                if (HasKitchenObject() &&
-                    _cuttingRecipesList.Exists(x => x.UnslicedObject == KitchenObject.KitchenObjectSettings))
+                CuttingRecipeSettings currentRecipeSettings =
+                    _cuttingRecipesList.Find(x => x.UnslicedObject == KitchenObject.KitchenObjectSettings);
+                if (HasKitchenObject() && currentRecipeSettings != null)
                 {
-                    KitchenObjectSettings slicedObjectPrefab =
-                        GetSlicedObjectDependOnInput(KitchenObject.KitchenObjectSettings);
-                    KitchenObject.DestroySelf();
-                    KitchenObject.SpawnKitchenObject(slicedObjectPrefab,
-                        this);
+                    _cuttingProgress++;
+                    if (_cuttingProgress >= currentRecipeSettings.CuttingProgressMax)
+                    {
+                        KitchenObjectSettings slicedObjectPrefab =
+                            GetSlicedObjectDependOnInput(KitchenObject.KitchenObjectSettings);
+                        KitchenObject.DestroySelf();
+                        KitchenObject.SpawnKitchenObject(slicedObjectPrefab,
+                            this);
+                    }
                 }
             }
         }

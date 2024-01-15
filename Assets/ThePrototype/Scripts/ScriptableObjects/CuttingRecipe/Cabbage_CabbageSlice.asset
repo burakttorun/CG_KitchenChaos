@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unslicedObject: {fileID: 11400000, guid: 732444ecd30358d4281e9338853a7cd4, type: 2}
   _slicedObject: {fileID: 11400000, guid: 71e07c4cbb9fce446a9fb701f41a6c03, type: 2}
+  _cuttingProgressMax: 5
