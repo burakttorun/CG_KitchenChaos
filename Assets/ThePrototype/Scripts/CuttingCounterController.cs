@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ThePrototype.Scripts.Base;
 using UnityEngine;
@@ -6,6 +7,8 @@ namespace ThePrototype.Scripts
 {
     public class CuttingCounterController : BaseCounter
     {
+        public event Action<float> OnCuttingProgressChanged;
+
         [Header("References")] [SerializeField]
         private List<CuttingRecipeSettings> _cuttingRecipesList;
 
@@ -26,6 +29,7 @@ namespace ThePrototype.Scripts
 
                         playerController.KitchenObject.ParentObject = this;
                         _cuttingProgress = 0;
+                        OnCuttingProgressChanged?.Invoke(_cuttingProgress);
                     }
                 }
                 else
@@ -43,18 +47,24 @@ namespace ThePrototype.Scripts
         {
             if (interactor is KitchenObjectParent kitchenObjectParent)
             {
-                CuttingRecipeSettings currentRecipeSettings =
-                    _cuttingRecipesList.Find(x => x.UnslicedObject == KitchenObject.KitchenObjectSettings);
-                if (HasKitchenObject() && currentRecipeSettings != null)
+                if (HasKitchenObject())
                 {
-                    _cuttingProgress++;
-                    if (_cuttingProgress >= currentRecipeSettings.CuttingProgressMax)
+                    CuttingRecipeSettings currentRecipeSettings =
+                        _cuttingRecipesList.Find(x => x.UnslicedObject == KitchenObject.KitchenObjectSettings);
+
+                    if (currentRecipeSettings != null)
                     {
-                        KitchenObjectSettings slicedObjectPrefab =
-                            GetSlicedObjectDependOnInput(KitchenObject.KitchenObjectSettings);
-                        KitchenObject.DestroySelf();
-                        KitchenObject.SpawnKitchenObject(slicedObjectPrefab,
-                            this);
+                        _cuttingProgress++;
+                        OnCuttingProgressChanged?.Invoke((float)_cuttingProgress /
+                                                         currentRecipeSettings.CuttingProgressMax);
+                        if (_cuttingProgress >= currentRecipeSettings.CuttingProgressMax)
+                        {
+                            KitchenObjectSettings slicedObjectPrefab =
+                                GetSlicedObjectDependOnInput(KitchenObject.KitchenObjectSettings);
+                            KitchenObject.DestroySelf();
+                            KitchenObject.SpawnKitchenObject(slicedObjectPrefab,
+                                this);
+                        }
                     }
                 }
             }
