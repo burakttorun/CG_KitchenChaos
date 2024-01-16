@@ -8,6 +8,7 @@ namespace ThePrototype.Scripts.Counter
     public class CuttingCounterController : BaseCounter
     {
         public event Action<float> OnCuttingProgressChanged;
+        public event Action<bool> OnHasKitchenObjectStatusChanged;
 
         [Header("References")] [SerializeField]
         private List<CuttingRecipeSettings> _cuttingRecipesList;
@@ -41,6 +42,8 @@ namespace ThePrototype.Scripts.Counter
                     }
                 }
             }
+
+            OnHasKitchenObjectStatusChanged?.Invoke(HasKitchenObject());
         }
 
         public void InteractAlternate(IInteractor interactor)
