@@ -4,8 +4,8 @@ using UnityEngine.Serialization;
 
 namespace ThePrototype.Scripts.ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "Cutting Recipe", menuName = "ThePrototype/Scriptable Objects/Cutting Recipe")]
-    public class CuttingRecipeSettings : ScriptableObject, IRecipeSetting
+    [CreateAssetMenu(fileName = "Frying Recipe", menuName = "ThePrototype/Scriptable Objects/Frying Recipe")]
+    public class FryingRecipeSettings : ScriptableObject, IRecipeSetting
     {
         [Header("References")] [SerializeField]
         private KitchenObjectSettings _inputObject;
@@ -25,12 +25,12 @@ namespace ThePrototype.Scripts.ScriptableObjects
         }
 
         [Header("Settings")]
-        [SerializeField] private int _cuttingProgressMax;
+        [SerializeField] private float _fryingTimerMax;
 
-        public int CuttingProgressMax
+        public float FryingTimerMax
         {
-            get => _cuttingProgressMax;
-            set { _cuttingProgressMax = value; }
+            get => _fryingTimerMax;
+            set { _fryingTimerMax = value; }
         }
     }
 }

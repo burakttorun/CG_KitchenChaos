@@ -11,13 +11,17 @@ namespace ThePrototype.Scripts.Counter
         public event Action<float> OnProgressChanged;
         public event Action<bool> OnHasKitchenObjectStatusChanged;
 
-        [Header("References")]
+        [Header("References")] [SerializeField]
+        private List<CuttingRecipeSettings> _cuttingRecipesList;
         
-        [SerializeField] private List<CuttingRecipeSettings> _cuttingRecipesList;
-
-        private int _cuttingProgress;
+        private float _cuttingProgress;
 
         public override void Interact(IInteractor interactor)
+        {
+            Interact(interactor, new List<IRecipeSetting>(_cuttingRecipesList), ref _cuttingProgress);
+        }
+
+        protected void Interact(IInteractor interactor, List<IRecipeSetting> recipeSettingList, ref float progressValue)
         {
             if (interactor is PlayerController playerController)
             {
@@ -26,13 +30,13 @@ namespace ThePrototype.Scripts.Counter
                     if (!playerController.HasKitchenObject()) return;
                     else
                     {
-                        if (!_cuttingRecipesList.Exists(x =>
+                        if (!recipeSettingList.Exists(x =>
                                 x.InputObject == playerController.KitchenObject.KitchenObjectSettings))
                             return;
 
                         playerController.KitchenObject.ParentObject = this;
-                        _cuttingProgress = 0;
-                        OnProgressChanged?.Invoke(_cuttingProgress);
+                        progressValue = 0;
+                        OnProgressChanged?.Invoke(progressValue);
                     }
                 }
                 else
@@ -50,22 +54,30 @@ namespace ThePrototype.Scripts.Counter
 
         public virtual void InteractAlternate(IInteractor interactor)
         {
+            InteractAlternate(interactor, new List<IRecipeSetting>(_cuttingRecipesList), ref _cuttingProgress);
+        }
+
+        protected void InteractAlternate(IInteractor interactor, List<IRecipeSetting> recipeLists,
+            ref float progressValue)
+        {
             if (interactor is KitchenObjectParent kitchenObjectParent)
             {
                 if (HasKitchenObject())
                 {
                     CuttingRecipeSettings currentRecipeSettings =
-                        FindCurrentRecipeSettings() as CuttingRecipeSettings;
+                        FindCurrentRecipeSettings(recipeLists) as
+                            CuttingRecipeSettings;
 
                     if (currentRecipeSettings != null)
                     {
-                        _cuttingProgress++;
+                        progressValue++;
                         OnProgressChanged?.Invoke((float)_cuttingProgress /
                                                   currentRecipeSettings.CuttingProgressMax);
-                        if (_cuttingProgress >= currentRecipeSettings.CuttingProgressMax)
+                        if (progressValue >= currentRecipeSettings.CuttingProgressMax)
                         {
                             KitchenObjectSettings slicedObjectPrefab =
-                                GetOutputObjectDependOnInput(KitchenObject.KitchenObjectSettings);
+                                GetOutputObjectDependOnInput(KitchenObject.KitchenObjectSettings,
+                                    recipeLists);
                             KitchenObject.DestroySelf();
                             KitchenObject.SpawnKitchenObject(slicedObjectPrefab,
                                 this);
@@ -75,14 +87,15 @@ namespace ThePrototype.Scripts.Counter
             }
         }
 
-        protected IRecipeSetting FindCurrentRecipeSettings()
+        protected IRecipeSetting FindCurrentRecipeSettings(List<IRecipeSetting> recipeLists)
         {
-            return _cuttingRecipesList.Find(x => x.InputObject == KitchenObject.KitchenObjectSettings);
+            return recipeLists.Find(x => x.InputObject == KitchenObject.KitchenObjectSettings);
         }
 
-        protected KitchenObjectSettings GetOutputObjectDependOnInput(KitchenObjectSettings input)
+        protected KitchenObjectSettings GetOutputObjectDependOnInput(KitchenObjectSettings input,
+            List<IRecipeSetting> recipeLists)
         {
-            return _cuttingRecipesList.Find(x => x.InputObject == input).OutputObject;
+            return recipeLists.Find(x => x.InputObject == input).OutputObject;
         }
     }
 }
