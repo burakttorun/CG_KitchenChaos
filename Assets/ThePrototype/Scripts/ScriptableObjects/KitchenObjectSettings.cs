@@ -2,7 +2,7 @@ using System;
 using ThePrototype.Scripts.Base;
 using UnityEngine;
 
-namespace ThePrototype.Scripts
+namespace ThePrototype.Scripts.ScriptableObjects
 {
     [CreateAssetMenu(fileName = "Kitchen Object", menuName = "ThePrototype/Scriptable Objects/Kitchen Objects")]
     [Serializable]

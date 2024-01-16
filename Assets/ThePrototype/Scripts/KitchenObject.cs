@@ -1,5 +1,6 @@
 using System;
 using ThePrototype.Scripts.Base;
+using ThePrototype.Scripts.ScriptableObjects;
 using TMPro.EditorUtilities;
 using UnityEngine;
 

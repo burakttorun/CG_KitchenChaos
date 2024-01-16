@@ -16,7 +16,7 @@ namespace ThePrototype.Scripts.AnimatorController
         private void Start()
         {
             _animator = GetComponent<Animator>();
-            _cuttingCounter.OnCuttingProgressChanged += PlayCuttingAnimation;
+            _cuttingCounter.OnProgressChanged += PlayCuttingAnimation;
         }
 
         private void PlayCuttingAnimation(float progressAmount)

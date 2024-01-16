@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
 using ThePrototype.Scripts.Base;
+using ThePrototype.Scripts.ScriptableObjects;
 using UnityEngine;
 
 namespace ThePrototype.Scripts.Counter
 {
     public class CuttingCounterController : BaseCounter
     {
-        public event Action<float> OnCuttingProgressChanged;
+        public event Action<float> OnProgressChanged;
         public event Action<bool> OnHasKitchenObjectStatusChanged;
 
-        [Header("References")] [SerializeField]
-        private List<CuttingRecipeSettings> _cuttingRecipesList;
+        [Header("References")]
+        
+        [SerializeField] private List<CuttingRecipeSettings> _cuttingRecipesList;
 
         private int _cuttingProgress;
 
@@ -25,12 +27,12 @@ namespace ThePrototype.Scripts.Counter
                     else
                     {
                         if (!_cuttingRecipesList.Exists(x =>
-                                x.UnslicedObject == playerController.KitchenObject.KitchenObjectSettings))
+                                x.InputObject == playerController.KitchenObject.KitchenObjectSettings))
                             return;
 
                         playerController.KitchenObject.ParentObject = this;
                         _cuttingProgress = 0;
-                        OnCuttingProgressChanged?.Invoke(_cuttingProgress);
+                        OnProgressChanged?.Invoke(_cuttingProgress);
                     }
                 }
                 else
@@ -46,24 +48,24 @@ namespace ThePrototype.Scripts.Counter
             OnHasKitchenObjectStatusChanged?.Invoke(HasKitchenObject());
         }
 
-        public void InteractAlternate(IInteractor interactor)
+        public virtual void InteractAlternate(IInteractor interactor)
         {
             if (interactor is KitchenObjectParent kitchenObjectParent)
             {
                 if (HasKitchenObject())
                 {
                     CuttingRecipeSettings currentRecipeSettings =
-                        _cuttingRecipesList.Find(x => x.UnslicedObject == KitchenObject.KitchenObjectSettings);
+                        FindCurrentRecipeSettings() as CuttingRecipeSettings;
 
                     if (currentRecipeSettings != null)
                     {
                         _cuttingProgress++;
-                        OnCuttingProgressChanged?.Invoke((float)_cuttingProgress /
-                                                         currentRecipeSettings.CuttingProgressMax);
+                        OnProgressChanged?.Invoke((float)_cuttingProgress /
+                                                  currentRecipeSettings.CuttingProgressMax);
                         if (_cuttingProgress >= currentRecipeSettings.CuttingProgressMax)
                         {
                             KitchenObjectSettings slicedObjectPrefab =
-                                GetSlicedObjectDependOnInput(KitchenObject.KitchenObjectSettings);
+                                GetOutputObjectDependOnInput(KitchenObject.KitchenObjectSettings);
                             KitchenObject.DestroySelf();
                             KitchenObject.SpawnKitchenObject(slicedObjectPrefab,
                                 this);
@@ -73,9 +75,14 @@ namespace ThePrototype.Scripts.Counter
             }
         }
 
-        private KitchenObjectSettings GetSlicedObjectDependOnInput(KitchenObjectSettings input)
+        protected IRecipeSetting FindCurrentRecipeSettings()
         {
-            return _cuttingRecipesList.Find(x => x.UnslicedObject == input).SlicedObject;
+            return _cuttingRecipesList.Find(x => x.InputObject == KitchenObject.KitchenObjectSettings);
+        }
+
+        protected KitchenObjectSettings GetOutputObjectDependOnInput(KitchenObjectSettings input)
+        {
+            return _cuttingRecipesList.Find(x => x.InputObject == input).OutputObject;
         }
     }
 }

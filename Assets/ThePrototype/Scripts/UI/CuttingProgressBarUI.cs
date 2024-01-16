@@ -14,7 +14,7 @@ namespace ThePrototype.Scripts.UI
 
         private void Start()
         {
-            _cuttingCounter.OnCuttingProgressChanged += CuttingProgressChanged;
+            _cuttingCounter.OnProgressChanged += CuttingProgressChanged;
             _cuttingCounter.OnHasKitchenObjectStatusChanged += HasKitchenObjectStatusChanged;
             Hide();
         }
