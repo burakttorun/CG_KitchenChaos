@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ThePrototype.Scripts.Counter
 {
-    enum State
+    public enum State
     {
         Idle,
         Frying,
@@ -20,6 +20,8 @@ namespace ThePrototype.Scripts.Counter
     {
         public event Action<float> OnProgressChanged;
         public event Action<bool> OnHasKitchenObjectStatusChanged;
+
+        public event Action<State> OnStateChanged;
 
         [Header("References")] [SerializeField]
         private List<FryingRecipeSettings> _fryingRecipesList;
@@ -43,7 +45,9 @@ namespace ThePrototype.Scripts.Counter
                     case State.Idle:
                         _fryingProgress = 0;
                         OnProgressChanged?.Invoke(_fryingProgress);
+                        OnStateChanged?.Invoke(_state);
                         break;
+
                     case State.Frying:
                         _fryingProgress += Time.deltaTime;
                         OnProgressChanged?.Invoke(_fryingProgress / _currentFryingRecipeSettings.FryingTimerMax);
@@ -54,9 +58,11 @@ namespace ThePrototype.Scripts.Counter
                             _fryingProgress = 0;
                             _currentFryingRecipeSettings = FindCurrentRecipeSettings(_fryingRecipesList);
                             _state = _currentFryingRecipeSettings == null ? State.Idle : State.Fried;
+                            OnStateChanged?.Invoke(_state);
                         }
 
                         break;
+
                     case State.Fried:
                         _fryingProgress += Time.deltaTime;
                         OnProgressChanged?.Invoke(_fryingProgress / _currentFryingRecipeSettings.FryingTimerMax);
@@ -65,6 +71,7 @@ namespace ThePrototype.Scripts.Counter
                             KitchenObject.DestroySelf();
                             KitchenObject.SpawnKitchenObject(_currentFryingRecipeSettings.OutputObject, this);
                             _state = State.Burned;
+                            OnStateChanged?.Invoke(_state);
                         }
 
                         break;
@@ -94,6 +101,7 @@ namespace ThePrototype.Scripts.Counter
                         _currentFryingRecipeSettings = FindCurrentRecipeSettings(_fryingRecipesList);
                         _state = State.Frying;
                         _fryingProgress = 0;
+                        OnStateChanged?.Invoke(_state);
                     }
                 }
                 else
@@ -103,6 +111,7 @@ namespace ThePrototype.Scripts.Counter
                     {
                         this.KitchenObject.ParentObject = playerController;
                         _state = State.Idle;
+                        OnStateChanged?.Invoke(_state);
                     }
                 }
             }
