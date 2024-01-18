@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using ThePrototype.Scripts.Base;
 using ThePrototype.Scripts.ScriptableObjects;
+using ThePrototype.Scripts.UI.Base;
 using UnityEngine;
 
 namespace ThePrototype.Scripts.Counter
 {
-    public class CuttingCounterController : BaseCounter
+    public class CuttingCounterController : BaseCounter,IHasProgress
     {
         public event Action<float> OnProgressChanged;
         public event Action<bool> OnHasKitchenObjectStatusChanged;
 
         [Header("References")] [SerializeField]
         private List<CuttingRecipeSettings> _cuttingRecipesList;
-        
+
         private int _cuttingProgress;
 
         public override void Interact(IInteractor interactor)

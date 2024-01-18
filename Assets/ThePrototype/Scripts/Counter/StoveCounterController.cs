@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ThePrototype.Scripts.Base;
 using ThePrototype.Scripts.ScriptableObjects;
+using ThePrototype.Scripts.UI.Base;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,8 +16,11 @@ namespace ThePrototype.Scripts.Counter
         Burned
     }
 
-    public class StoveCounterController : BaseCounter
+    public class StoveCounterController : BaseCounter, IHasProgress
     {
+        public event Action<float> OnProgressChanged;
+        public event Action<bool> OnHasKitchenObjectStatusChanged;
+
         [Header("References")] [SerializeField]
         private List<FryingRecipeSettings> _fryingRecipesList;
 
@@ -38,9 +42,11 @@ namespace ThePrototype.Scripts.Counter
                 {
                     case State.Idle:
                         _fryingProgress = 0;
+                        OnProgressChanged?.Invoke(_fryingProgress);
                         break;
                     case State.Frying:
                         _fryingProgress += Time.deltaTime;
+                        OnProgressChanged?.Invoke(_fryingProgress / _currentFryingRecipeSettings.FryingTimerMax);
                         if (_fryingProgress >= _currentFryingRecipeSettings.FryingTimerMax)
                         {
                             KitchenObject.DestroySelf();
@@ -53,6 +59,7 @@ namespace ThePrototype.Scripts.Counter
                         break;
                     case State.Fried:
                         _fryingProgress += Time.deltaTime;
+                        OnProgressChanged?.Invoke(_fryingProgress / _currentFryingRecipeSettings.FryingTimerMax);
                         if (_fryingProgress >= _currentFryingRecipeSettings.FryingTimerMax)
                         {
                             KitchenObject.DestroySelf();
@@ -64,6 +71,7 @@ namespace ThePrototype.Scripts.Counter
 
                     case State.Burned:
                         _fryingProgress = 0;
+                        OnProgressChanged?.Invoke(_fryingProgress);
                         break;
                 }
             }
@@ -85,6 +93,7 @@ namespace ThePrototype.Scripts.Counter
                         playerController.KitchenObject.ParentObject = this;
                         _currentFryingRecipeSettings = FindCurrentRecipeSettings(_fryingRecipesList);
                         _state = State.Frying;
+                        _fryingProgress = 0;
                     }
                 }
                 else
@@ -97,6 +106,8 @@ namespace ThePrototype.Scripts.Counter
                     }
                 }
             }
+
+            OnHasKitchenObjectStatusChanged?.Invoke(HasKitchenObject());
         }
 
         protected FryingRecipeSettings FindCurrentRecipeSettings(List<FryingRecipeSettings> recipeLists)
