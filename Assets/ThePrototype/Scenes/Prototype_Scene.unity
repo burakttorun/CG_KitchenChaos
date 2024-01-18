@@ -1689,13 +1689,19 @@ PrefabInstance:
     - target: {fileID: 581794232881082719, guid: 556941a489d55e740a5d06145f4aa7d8,
         type: 3}
       propertyPath: _fryingRecipesList.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 581794232881082719, guid: 556941a489d55e740a5d06145f4aa7d8,
         type: 3}
       propertyPath: _fryingRecipesList.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: e46f37fd945862e4cad0c246ee259fc2,
+        type: 2}
+    - target: {fileID: 581794232881082719, guid: 556941a489d55e740a5d06145f4aa7d8,
+        type: 3}
+      propertyPath: _fryingRecipesList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 662e888fd64cb4149a694c81dc60d203,
         type: 2}
     - target: {fileID: 5103172418612756617, guid: 556941a489d55e740a5d06145f4aa7d8,
         type: 3}

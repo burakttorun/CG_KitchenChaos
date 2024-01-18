@@ -14,14 +14,14 @@ namespace ThePrototype.Scripts.Counter
         [Header("References")] [SerializeField]
         private List<CuttingRecipeSettings> _cuttingRecipesList;
         
-        private float _cuttingProgress;
+        private int _cuttingProgress;
 
         public override void Interact(IInteractor interactor)
         {
             Interact(interactor, new List<IRecipeSetting>(_cuttingRecipesList), ref _cuttingProgress);
         }
 
-        protected void Interact(IInteractor interactor, List<IRecipeSetting> recipeSettingList, ref float progressValue)
+        protected void Interact(IInteractor interactor, List<IRecipeSetting> recipeSettingList, ref int progressValue)
         {
             if (interactor is PlayerController playerController)
             {
@@ -58,7 +58,7 @@ namespace ThePrototype.Scripts.Counter
         }
 
         protected void InteractAlternate(IInteractor interactor, List<IRecipeSetting> recipeLists,
-            ref float progressValue)
+            ref int progressValue)
         {
             if (interactor is KitchenObjectParent kitchenObjectParent)
             {
