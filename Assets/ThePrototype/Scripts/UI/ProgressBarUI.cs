@@ -1,21 +1,35 @@
 using System;
 using ThePrototype.Scripts.Counter;
+using ThePrototype.Scripts.UI.Base;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ThePrototype.Scripts.UI
 {
-    public class CuttingProgressBarUI : MonoBehaviour
+    public class ProgressBarUI : MonoBehaviour
     {
         [Header("References")] [SerializeField]
         private Image _barImage;
 
-        [SerializeField] private CuttingCounterController _cuttingCounter;
+        private IHasProgress _progressiveCounter;
+
+        protected IHasProgress ProgressiveCounter
+        {
+            get => _progressiveCounter;
+            set { _progressiveCounter = value; }
+        }
+
+        [SerializeField] private GameObject _progressiveGameObject;
+
+        private void Awake()
+        {
+            ProgressiveCounter = _progressiveGameObject.GetComponent<IHasProgress>();
+        }
 
         private void Start()
         {
-            _cuttingCounter.OnProgressChanged += CuttingProgressChanged;
-            _cuttingCounter.OnHasKitchenObjectStatusChanged += HasKitchenObjectStatusChanged;
+            _progressiveCounter.OnProgressChanged += CuttingProgressChanged;
+            _progressiveCounter.OnHasKitchenObjectStatusChanged += HasKitchenObjectStatusChanged;
             Hide();
         }
 
